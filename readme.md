@@ -57,6 +57,7 @@ FLAGS:
                               reliable.
     -h, --help                Prints help information
     -V, --version             Prints version information
+    -v, --verbose             Still show commands instead of omitting them
 
 OPTIONS:
     -b, --base-topic <STRING>    MQTT Root Topic of the matrix to publish to [default: espMatrix]
@@ -69,11 +70,12 @@ led-matrix-remote-http
 Read from stdin how the led matrix should look and send it via HTTP
 
 USAGE:
-    led-matrix-remote http [OPTIONS]
+    led-matrix-remote http [FLAGS] [OPTIONS]
 
 FLAGS:
     -h, --help       Prints help information
     -V, --version    Prints version information
+    -v, --verbose    Still show commands instead of omitting them
 
 OPTIONS:
     -s, --server <URI>    Specify the HTTP Server [default: http://esp-matrix/]

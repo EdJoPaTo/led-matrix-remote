@@ -9,15 +9,17 @@ mod topic;
 
 fn main() {
     let stdin = io::stdin();
-    let sender = cli::get_sender();
+    let args = cli::get_runtime_arguments();
     for line in stdin.lock().lines() {
         let line_text = line.expect("failed to read line");
 
         match parse::parse(&line_text) {
             None => println!("{}", line_text),
             Some(command) => {
-                sender.send(command.topic, command.value);
-                println!("{}  ✓", line_text);
+                args.sender.send(command.topic, command.value);
+                if args.verbose {
+                    println!("{}  ✓", line_text);
+                }
             }
         }
     }
