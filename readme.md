@@ -17,25 +17,25 @@ You can also write scripts to send stuff over to the LED Matrix:
 ```sh
 #!/bin/sh
 
-# Print "one" in color red, then wait a second
+echo "# Print 'one' in color red, then wait a second"
 echo "bri 40"
 echo "sat 100"
 echo "hue 0"
 echo "text one"
 sleep 1
 
-# Print "two" in color green, then wait a second
+echo "# Print 'two' in color green, then wait a second"
 echo "hue 120"
 echo "text two"
 sleep 1
 
-# Print "three" in color blue
+echo "# Print 'three' in color blue"
 echo "hue 240"
 echo "text three"
 ```
 
 ```
-./script.sh | led-matrix-remote http
+./example.sh | led-matrix-remote http
 ```
 
 ## Arguments
