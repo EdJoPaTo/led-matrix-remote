@@ -1,0 +1,24 @@
+[package]
+name = "led-matrix-remote"
+description = "Read from stdin how a led matrix should look and send it via HTTP or MQTT to the led matrix"
+version = "0.1.0"
+authors = ["EdJoPaTo <led-matrix-remote-rust@edjopato.de>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+
+[dependencies.clap]
+version = "2.33"
+features = ["wrap_help"]
+
+[dependencies.reqwest]
+version = "0.10"
+features = ["blocking"]
+
+[dependencies.paho-mqtt]
+version = "0.7"
+default-features = false
+# Add "ssl" to the features if you need ssl support
+features = ["bundled", "build_bindgen"]
