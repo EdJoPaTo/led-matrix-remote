@@ -1,5 +1,5 @@
-use crate::topic::Topic;
+use crate::command::Command;
 
 pub trait Sender {
-    fn send(&self, topic: Topic, value: &str) -> Result<(), String>;
+    fn send(&self, command: &Command) -> Result<(), String>;
 }

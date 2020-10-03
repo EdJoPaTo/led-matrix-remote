@@ -1,11 +1,6 @@
+use crate::command::Command;
 use crate::sender::Sender;
-use crate::topic::{get_verb, Topic};
 use reqwest::blocking::Client;
-
-pub fn generate_url(server: &str, topic: Topic) -> String {
-    let verb = get_verb(&topic);
-    format!("{}{}", server, verb)
-}
 
 pub struct HttpSender {
     server: String,
@@ -27,12 +22,13 @@ impl HttpSender {
 }
 
 impl Sender for HttpSender {
-    fn send(&self, topic: Topic, value: &str) -> Result<(), String> {
-        let url = generate_url(&self.server, topic);
+    fn send(&self, command: &Command) -> Result<(), String> {
+        let url = format!("{}{}", &self.server, command.get_verb());
+        let value = command.get_value_string();
 
         self.client
             .post(&url)
-            .body(value.to_owned())
+            .body(value)
             .send()
             .map_err(|err| format!("failed to send via http: {}", err))?;
 

@@ -1,5 +1,5 @@
+use crate::command::Command;
 use crate::sender::Sender;
-use crate::topic::{get_verb, Topic};
 use paho_mqtt::{
     Client, ConnectOptionsBuilder, CreateOptionsBuilder, MessageBuilder, MqttError, PersistenceType,
 };
@@ -36,11 +36,6 @@ pub fn publish(client: &Client, topic: &str, payload: &str, qos: i32) -> Result<
     client.publish(msg)
 }
 
-pub fn generate_topic(base_topic: &str, topic: Topic) -> String {
-    let verb = get_verb(&topic);
-    format!("{}/set/{}", base_topic, verb)
-}
-
 pub struct MqttSender {
     base_topic: String,
     qos: i32,
@@ -60,9 +55,10 @@ impl MqttSender {
 }
 
 impl Sender for MqttSender {
-    fn send(&self, topic: Topic, value: &str) -> Result<(), String> {
-        let topic_string = generate_topic(&self.base_topic, topic);
-        publish(&self.client, &topic_string, value, self.qos)
+    fn send(&self, command: &Command) -> Result<(), String> {
+        let topic = format!("{}/set/{}", &self.base_topic, command.get_verb());
+        let payload = command.get_value_string();
+        publish(&self.client, &topic, &payload, self.qos)
             .map_err(|err| format!("failed to send via mqtt: {}", err))
     }
 }
