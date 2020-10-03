@@ -27,13 +27,15 @@ impl HttpSender {
 }
 
 impl Sender for HttpSender {
-    fn send(&self, topic: Topic, value: &str) {
+    fn send(&self, topic: Topic, value: &str) -> Result<(), String> {
         let url = generate_url(&self.server, topic);
 
         self.client
             .post(&url)
             .body(value.to_owned())
             .send()
-            .expect("failed to publish via http");
+            .map_err(|err| format!("failed to send via http: {}", err))?;
+
+        Ok(())
     }
 }

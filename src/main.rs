@@ -16,7 +16,9 @@ fn main() {
         match parse::parse(&line_text) {
             None => println!("{}", line_text),
             Some(command) => {
-                args.sender.send(command.topic, command.value);
+                args.sender
+                    .send(command.topic, command.value)
+                    .expect("failed to send");
                 if args.verbose {
                     println!("{}  ✓", line_text);
                 }

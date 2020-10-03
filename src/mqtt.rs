@@ -60,8 +60,9 @@ impl MqttSender {
 }
 
 impl Sender for MqttSender {
-    fn send(&self, topic: Topic, value: &str) {
+    fn send(&self, topic: Topic, value: &str) -> Result<(), String> {
         let topic_string = generate_topic(&self.base_topic, topic);
-        publish(&self.client, &topic_string, value, self.qos).expect("failed to publish to mqtt")
+        publish(&self.client, &topic_string, value, self.qos)
+            .map_err(|err| format!("failed to send via mqtt: {}", err))
     }
 }
