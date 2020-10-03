@@ -1,3 +1,5 @@
+use io::Write;
+use retry::retry;
 use std::io::{self, BufRead};
 
 mod cli;
@@ -15,10 +17,25 @@ fn main() {
         match command::parse(&line_text) {
             None => println!("{}", line_text),
             Some(command) => {
-                args.sender.send(&command).expect("failed to send");
                 if args.verbose {
-                    println!("{}  ✓", line_text);
+                    print!("{}  ", line_text);
                 }
+
+                retry(retry::delay::Fixed::from_millis(20).take(2), || {
+                    let result = args.sender.send(&command);
+
+                    if args.verbose {
+                        if result.is_ok() {
+                            println!("✓");
+                        } else {
+                            print!("✗");
+                            io::stdout().flush().expect("failed to flush stdout");
+                        }
+                    }
+
+                    result
+                })
+                .expect("failed to send");
             }
         }
     }
