@@ -18,9 +18,8 @@ impl Command<'_> {
 
     pub fn get_value_string(&self) -> String {
         match &self {
-            Command::Bri(value) => format!("{}", value),
+            Command::Bri(value) | Command::Sat(value) => format!("{}", value),
             Command::Hue(value) => format!("{}", value),
-            Command::Sat(value) => format!("{}", value),
             Command::Text(value) => value.to_string(),
         }
     }
