@@ -8,7 +8,7 @@ pub struct RuntimeArguments {
     pub sender: Box<dyn Sender>,
 }
 
-pub fn build_cli() -> App<'static, 'static> {
+pub fn build() -> App<'static, 'static> {
     let generic_args = [Arg::with_name("verbose")
         .short("v")
         .long("verbose")
@@ -67,7 +67,7 @@ pub fn build_cli() -> App<'static, 'static> {
 }
 
 pub fn get_runtime_arguments() -> RuntimeArguments {
-    let matches = build_cli().get_matches();
+    let matches = build().get_matches();
 
     if let Some(mqtt_and_http_matches) = matches
         .subcommand_matches("mqtt")

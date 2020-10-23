@@ -2,6 +2,7 @@ use crate::command::Command;
 use crate::sender::Sender;
 use reqwest::blocking::Client;
 
+#[allow(clippy::module_name_repetitions)]
 pub struct HttpSender {
     server: String,
     client: Client,

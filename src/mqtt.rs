@@ -36,6 +36,7 @@ pub fn publish(client: &Client, topic: &str, payload: &str, qos: i32) -> Result<
     client.publish(msg)
 }
 
+#[allow(clippy::module_name_repetitions)]
 pub struct MqttSender {
     base_topic: String,
     qos: i32,
