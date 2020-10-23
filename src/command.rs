@@ -50,44 +50,39 @@ pub fn parse(input: &str) -> Option<Command<'_>> {
     }
 }
 
-#[cfg(test)]
-mod tests {
-    use super::*;
+#[test]
+fn parse_ignores_comments() {
+    assert_eq!(None, parse("# some comment"));
+}
+#[test]
+fn parse_works() {
+    assert_eq!(Some(Command::Hue(300)), parse("hue 300"));
+    assert_eq!(Some(Command::Sat(80)), parse("sat 80"));
+    assert_eq!(Some(Command::Bri(60)), parse("bri 60"));
+}
 
-    #[test]
-    fn parse_ignores_comments() {
-        assert_eq!(None, parse("# some comment"));
-    }
-    #[test]
-    fn parse_works() {
-        assert_eq!(Some(Command::Hue(300)), parse("hue 300"));
-        assert_eq!(Some(Command::Sat(80)), parse("sat 80"));
-        assert_eq!(Some(Command::Bri(60)), parse("bri 60"));
-    }
+#[test]
+fn parse_works_with_strange_casing() {
+    assert_eq!(Some(Command::Hue(10)), parse("Hue 10"));
+    assert_eq!(Some(Command::Sat(10)), parse("sAt 10"));
+    assert_eq!(Some(Command::Bri(10)), parse("brI 10"));
+}
 
-    #[test]
-    fn parse_works_with_strange_casing() {
-        assert_eq!(Some(Command::Hue(10)), parse("Hue 10"));
-        assert_eq!(Some(Command::Sat(10)), parse("sAt 10"));
-        assert_eq!(Some(Command::Bri(10)), parse("brI 10"));
-    }
+#[test]
+fn parse_parses_text() {
+    assert_eq!(Some(Command::Text("stuff")), parse("text stuff"));
+}
 
-    #[test]
-    fn parse_parses_text() {
-        assert_eq!(Some(Command::Text("stuff")), parse("text stuff"));
-    }
+#[test]
+fn parse_parses_text_with_spaces() {
+    assert_eq!(
+        Some(Command::Text("stuff with spaces")),
+        parse("text stuff with spaces")
+    );
+}
 
-    #[test]
-    fn parse_parses_text_with_spaces() {
-        assert_eq!(
-            Some(Command::Text("stuff with spaces")),
-            parse("text stuff with spaces")
-        );
-    }
-
-    #[test]
-    fn parse_ignores_wrong() {
-        assert_eq!(None, parse("whatever"));
-        assert_eq!(None, parse("whatever with spaces"));
-    }
+#[test]
+fn parse_ignores_wrong() {
+    assert_eq!(None, parse("whatever"));
+    assert_eq!(None, parse("whatever with spaces"));
 }
