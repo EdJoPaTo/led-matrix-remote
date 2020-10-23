@@ -25,6 +25,7 @@ fn main() {
                     let result = args.sender.send(&command);
 
                     if args.verbose {
+                        #[allow(clippy::non_ascii_literal)]
                         if result.is_ok() {
                             println!("✓");
                         } else {
