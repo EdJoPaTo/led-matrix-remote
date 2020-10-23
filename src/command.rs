@@ -20,7 +20,7 @@ impl Command<'_> {
         match &self {
             Command::Bri(value) | Command::Sat(value) => format!("{}", value),
             Command::Hue(value) => format!("{}", value),
-            Command::Text(value) => value.to_string(),
+            Command::Text(value) => (*value).to_string(),
         }
     }
 }
