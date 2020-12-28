@@ -12,7 +12,8 @@ pub struct MqttSender {
 
 impl MqttSender {
     pub fn new(host: &str, port: u16, base_topic: &str) -> MqttSender {
-        let mut mqttoptions = MqttOptions::new("666", host, port);
+        let client_id = format!("led-matrix-remote-{:x}", rand::random::<u32>());
+        let mut mqttoptions = MqttOptions::new(client_id, host, port);
         mqttoptions.set_keep_alive(5);
 
         let (client, connection) = Client::new(mqttoptions, 10);
