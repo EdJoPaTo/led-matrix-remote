@@ -10,7 +10,7 @@ mod sender;
 
 fn main() {
     let stdin = io::stdin();
-    let args = cli::get_runtime_arguments();
+    let mut args = cli::get_runtime_arguments();
     for line in stdin.lock().lines() {
         let line_text = line.expect("failed to read line");
 

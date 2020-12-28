@@ -53,16 +53,14 @@ USAGE:
     led-matrix-remote mqtt [FLAGS] [OPTIONS]
 
 FLAGS:
-    -p, --file-persistence    When enabled the MQTT persistence is done via files within the working directory. Enabling this is more
-                              reliable.
-    -h, --help                Prints help information
-    -V, --version             Prints version information
-    -v, --verbose             Still show commands instead of omitting them
+        --help       Prints help information
+    -V, --version    Prints version information
+    -v, --verbose    Still show commands instead of omitting them
 
 OPTIONS:
-    -b, --base-topic <STRING>    MQTT Root Topic of the matrix to publish to [default: espMatrix]
-    -q, --qos <INT>              Define the Quality of Service for the MQTT Messages (0, 1 or 2) [default: 2]
-    -s, --mqtt-server <URI>      Specify the MQTT Server [default: tcp://localhost:1883]
+    -t, --base-topic <STRING>    MQTT Root Topic of the matrix to publish to [default: espMatrix]
+    -p, --port <INT>             Port on which the MQTT Broker is running [default: 1883]
+    -h, --host <HOST>            Host on which the MQTT Broker is running [default: localhost]
 ```
 
 ```plaintext

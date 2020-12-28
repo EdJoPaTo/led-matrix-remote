@@ -8,6 +8,7 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+rumqttc = "0.3"
 
 [dependencies.clap]
 version = "2.33"
@@ -20,9 +21,3 @@ default-features = false
 [dependencies.reqwest]
 version = "0.10"
 features = ["blocking"]
-
-[dependencies.paho-mqtt]
-version = "0.7"
-default-features = false
-# Add "ssl" to the features if you need ssl support
-features = ["bundled", "build_bindgen"]

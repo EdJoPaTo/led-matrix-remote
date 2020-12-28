@@ -23,7 +23,7 @@ impl HttpSender {
 }
 
 impl Sender for HttpSender {
-    fn send(&self, command: &Command) -> Result<(), String> {
+    fn send(&mut self, command: &Command) -> Result<(), String> {
         let url = format!("{}{}", &self.server, command.get_verb());
         let value = command.get_value_string();
 

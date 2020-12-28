@@ -1,65 +1,61 @@
 use crate::command::Command;
 use crate::sender::Sender;
-use paho_mqtt::{
-    Client, ConnectOptionsBuilder, CreateOptionsBuilder, MessageBuilder, MqttError, PersistenceType,
-};
-use std::time::Duration;
-
-pub fn connect(mqtt_server: &str, file_persistence: bool) -> Result<Client, MqttError> {
-    let create_options = CreateOptionsBuilder::new()
-        .server_uri(mqtt_server)
-        .persistence(if file_persistence {
-            PersistenceType::File
-        } else {
-            PersistenceType::None
-        })
-        .finalize();
-
-    let client = Client::new(create_options)?;
-
-    let connection_options = ConnectOptionsBuilder::new()
-        .automatic_reconnect(Duration::from_secs(1), Duration::from_secs(30))
-        .finalize();
-
-    client.connect(connection_options)?;
-
-    Ok(client)
-}
-
-pub fn publish(client: &Client, topic: &str, payload: &str, qos: i32) -> Result<(), MqttError> {
-    let msg = MessageBuilder::new()
-        .topic(topic)
-        .qos(qos)
-        .payload(payload)
-        .finalize();
-
-    client.publish(msg)
-}
+use rumqttc::{Client, Connection, MqttOptions, QoS};
+use std::thread;
 
 #[allow(clippy::module_name_repetitions)]
 pub struct MqttSender {
     base_topic: String,
-    qos: i32,
     client: Client,
+    thread_handle: Option<thread::JoinHandle<()>>,
 }
 
 impl MqttSender {
-    pub fn new(server: &str, base_topic: &str, file_persistence: bool, qos: i32) -> MqttSender {
-        let client = connect(server, file_persistence).expect("failed to connect to MQTT server");
+    pub fn new(host: &str, port: u16, base_topic: &str) -> MqttSender {
+        let mut mqttoptions = MqttOptions::new("666", host, port);
+        mqttoptions.set_keep_alive(5);
+
+        let (client, connection) = Client::new(mqttoptions, 10);
+
+        let thread_handle = thread::Builder::new()
+            .name("mqtt connection".into())
+            .spawn(move || thread_logic(connection))
+            .expect("failed to start mqtt thread");
 
         MqttSender {
             client,
-            qos,
             base_topic: base_topic.to_owned(),
+            thread_handle: Some(thread_handle),
+        }
+    }
+}
+
+impl Drop for MqttSender {
+    fn drop(&mut self) {
+        // Try to disconnect and wait but dont care if that doesnt work (-> or default)
+        self.client.disconnect().unwrap_or_default();
+        if let Some(thread_handle) = self.thread_handle.take() {
+            thread_handle.join().unwrap_or_default();
+        }
+    }
+}
+
+fn thread_logic(mut connection: Connection) {
+    for notification in connection.iter() {
+        if let rumqttc::Event::Outgoing(rumqttc::Outgoing::Disconnect) =
+            notification.expect("mqtt connection error")
+        {
+            break;
         }
     }
 }
 
 impl Sender for MqttSender {
-    fn send(&self, command: &Command) -> Result<(), String> {
+    fn send(&mut self, command: &Command) -> Result<(), String> {
         let topic = format!("{}/set/{}", &self.base_topic, command.get_verb());
         let payload = command.get_value_string();
-        publish(&self.client, &topic, &payload, self.qos)
+        self.client
+            .publish(topic, QoS::AtLeastOnce, false, payload)
             .map_err(|err| format!("failed to send via mqtt: {}", err))
     }
 }
