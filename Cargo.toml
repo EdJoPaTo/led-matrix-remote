@@ -1,7 +1,7 @@
 [package]
 name = "led-matrix-remote"
 description = "Read from stdin how a led matrix should look and send it via HTTP or MQTT to the led matrix"
-version = "0.3.0"
+version = "0.4.0"
 authors = ["EdJoPaTo <led-matrix-remote-rust@edjopato.de>"]
 edition = "2018"
 
