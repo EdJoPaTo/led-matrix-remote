@@ -1,5 +1,6 @@
 #[derive(Debug, PartialEq)]
 pub enum Command<'a> {
+    On(bool),
     Bri(u8),
     Hue(u16),
     Sat(u8),
@@ -9,6 +10,7 @@ pub enum Command<'a> {
 impl Command<'_> {
     pub fn get_verb(&self) -> &'static str {
         match &self {
+            Command::On(_) => "on",
             Command::Bri(_) => "bri",
             Command::Hue(_) => "hue",
             Command::Sat(_) => "sat",
@@ -18,6 +20,8 @@ impl Command<'_> {
 
     pub fn get_value_string(&self) -> String {
         match &self {
+            Command::On(true) => "1".to_string(),
+            Command::On(false) => "0".to_string(),
             Command::Bri(value) | Command::Sat(value) => format!("{}", value),
             Command::Hue(value) => format!("{}", value),
             Command::Text(value) => (*value).to_string(),
@@ -33,6 +37,11 @@ pub fn parse(input: &str) -> Option<Command<'_>> {
     let value_string = trimmed.get(splitter + 1..)?;
 
     match topic.to_lowercase().as_ref() {
+        "on" => match value_string {
+            "1" | "true" => Some(Command::On(true)),
+            "0" | "false" => Some(Command::On(false)),
+            _ => None,
+        },
         "hue" => {
             let value = value_string.parse::<u16>().ok()?;
             Some(Command::Hue(value))
@@ -71,6 +80,14 @@ fn parse_works_with_strange_casing() {
 #[test]
 fn parse_parses_text() {
     assert_eq!(Some(Command::Text("stuff")), parse("text stuff"));
+}
+
+#[test]
+fn parse_parses_on() {
+    assert_eq!(Some(Command::On(true)), parse("on true"));
+    assert_eq!(Some(Command::On(true)), parse("on 1"));
+    assert_eq!(Some(Command::On(false)), parse("on false"));
+    assert_eq!(Some(Command::On(false)), parse("on 0"));
 }
 
 #[test]
