@@ -2,6 +2,7 @@ use crate::command::Command;
 use crate::sender::Sender;
 use rumqttc::{Client, Connection, MqttOptions, QoS};
 use std::thread;
+use std::time::Duration;
 
 #[allow(clippy::module_name_repetitions)]
 pub struct MqttSender {
@@ -31,6 +32,9 @@ impl MqttSender {
 
 impl Drop for MqttSender {
     fn drop(&mut self) {
+        // As the client is asynchronous wait for it to actually do the last things it was commanded to do
+        thread::sleep(Duration::from_millis(500));
+
         // Try to disconnect and wait but dont care if that doesnt work (-> or default)
         self.client.disconnect().unwrap_or_default();
         if let Some(thread_handle) = self.thread_handle.take() {
