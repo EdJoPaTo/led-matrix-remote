@@ -8,14 +8,14 @@ Each of them is for a LED Matrix with some commands to set what its displaying: 
 
 This tools sets them based on the stdin, so you can just pipe in what you want to set:
 
-```sh
+```bash
 echo "bri 20" | led-matrix-remote http
 ```
 
 You can also write scripts to send stuff over to the LED Matrix:
 
-```sh
-#!/bin/sh
+```bash
+#!/usr/bin/env bash
 
 echo "# Print 'one' in color red, then wait a second"
 echo "bri 40"
@@ -34,7 +34,7 @@ echo "hue 240"
 echo "text three"
 ```
 
-```
+```bash
 ./example.sh | led-matrix-remote http
 ```
 
@@ -84,7 +84,7 @@ OPTIONS:
 A script for a simple countdown might look like this:
 
 ```bash
-#!/bin/bash
+#!/usr/bin/env bash
 for value in {10..0}
 do
     echo "text $value"
@@ -94,6 +94,6 @@ done
 echo "text The End \o/"
 ```
 
-```sh
+```bash
 ./countdown.sh | led-matrix-remote http
 ```

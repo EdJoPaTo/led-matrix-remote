@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/usr/bin/env bash
 
 echo "# Print 'one' in color red, then wait a second"
 echo "bri 40"
