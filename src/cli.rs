@@ -4,8 +4,8 @@ use crate::sender::Sender;
 use clap::{App, AppSettings, Arg, SubCommand};
 
 pub struct RuntimeArguments {
-    pub verbose: bool,
     pub sender: Box<dyn Sender>,
+    pub verbose: bool,
 }
 
 pub fn build() -> App<'static, 'static> {
