@@ -53,14 +53,14 @@ USAGE:
     led-matrix-remote mqtt [FLAGS] [OPTIONS]
 
 FLAGS:
-        --help       Prints help information
+    -h, --help       Prints help information
     -V, --version    Prints version information
     -v, --verbose    Still show commands instead of omitting them
 
 OPTIONS:
     -t, --base-topic <STRING>    MQTT Root Topic of the matrix to publish to [default: espMatrix]
     -p, --port <INT>             Port on which the MQTT Broker is running [default: 1883]
-    -h, --host <HOST>            Host on which the MQTT Broker is running [default: localhost]
+    -b, --broker <HOST>          Host on which the MQTT Broker is running [default: localhost]
 ```
 
 ```plaintext

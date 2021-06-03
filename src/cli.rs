@@ -32,8 +32,8 @@ pub fn build() -> App<'static, 'static> {
                 .about("Read from stdin how the led matrix should look and send it via MQTT")
                 .arg(
                     Arg::with_name("MQTT Server")
-                        .short("h")
-                        .long("host")
+                        .short("b")
+                        .long("broker")
                         .value_name("HOST")
                         .takes_value(true)
                         .help("Host on which the MQTT Broker is running")
