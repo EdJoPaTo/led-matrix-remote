@@ -39,7 +39,7 @@ fn main() {
                 .value_of("MQTT Base Topic")
                 .expect("MQTT Base Topic could not be read from command line");
 
-            Box::new(MqttSender::new(mqtt_host, mqtt_port, &mqtt_base_topic))
+            Box::new(MqttSender::new(mqtt_host, mqtt_port, mqtt_base_topic))
         }
         _ => unimplemented!("Unknown subcommand"),
     };
