@@ -19,7 +19,7 @@ clap = "2"
 
 [dependencies]
 rand = "0.8"
-rumqttc = "0.7"
+rumqttc = "0.8"
 
 [dependencies.clap]
 version = "2"
