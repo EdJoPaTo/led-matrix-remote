@@ -5,7 +5,7 @@ version = "0.6.0"
 license = "MIT"
 repository = "https://github.com/EdJoPaTo/led-matrix-remote"
 authors = ["EdJoPaTo <led-matrix-remote-rust@edjopato.de>"]
-edition = "2018"
+edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
