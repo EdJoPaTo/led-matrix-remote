@@ -17,15 +17,15 @@ fn main() {
 
     let matches = cli::build().get_matches();
     let verbose = matches.is_present("verbose");
-    let mut sender: Box<dyn Sender> = match matches.subcommand() {
-        ("http", Some(http_matches)) => {
+    let mut sender: Box<dyn Sender> = match matches.subcommand().expect("expected a subcommand") {
+        ("http", http_matches) => {
             let server = http_matches
                 .value_of("HTTP Server")
                 .expect("HTTP Server could not be read from command line");
 
             Box::new(HttpSender::new(server))
         }
-        ("mqtt", Some(mqtt_matches)) => {
+        ("mqtt", mqtt_matches) => {
             let mqtt_host = mqtt_matches
                 .value_of("MQTT Server")
                 .expect("MQTT Host could not be read from command line");

@@ -1,61 +1,58 @@
-use clap::{App, AppSettings, Arg, SubCommand};
+use clap::{app_from_crate, App, AppSettings, Arg};
 
 #[must_use]
-pub fn build() -> App<'static, 'static> {
-    App::new("LED Matrix Remote")
-        .version(env!("CARGO_PKG_VERSION"))
-        .author(env!("CARGO_PKG_AUTHORS"))
-        .about(env!("CARGO_PKG_DESCRIPTION"))
-        .global_setting(AppSettings::ColoredHelp)
+pub fn build() -> App<'static> {
+    app_from_crate!()
+        .name("LED Matrix Remote")
         .setting(AppSettings::SubcommandRequired)
         .arg(
-            Arg::with_name("verbose")
-                .short("v")
+            Arg::new("verbose")
+                .short('v')
                 .long("verbose")
                 .global(true)
-                .help("Still show commands instead of omitting them"),
+                .about("Still show commands instead of omitting them"),
         )
         .subcommand(
-            SubCommand::with_name("http")
+            App::new("http")
                 .about("Read from stdin how the led matrix should look and send it via HTTP")
                 .arg(
-                    Arg::with_name("HTTP Server")
-                        .short("s")
+                    Arg::new("HTTP Server")
+                        .short('s')
                         .long("server")
                         .value_name("URI")
                         .takes_value(true)
-                        .help("Specify the HTTP Server")
+                        .about("Specify the HTTP Server")
                         .default_value("http://esp-matrix/"),
                 ),
         )
         .subcommand(
-            SubCommand::with_name("mqtt")
+            App::new("mqtt")
                 .about("Read from stdin how the led matrix should look and send it via MQTT")
                 .arg(
-                    Arg::with_name("MQTT Server")
-                        .short("b")
+                    Arg::new("MQTT Server")
+                        .short('b')
                         .long("broker")
                         .value_name("HOST")
                         .takes_value(true)
-                        .help("Host on which the MQTT Broker is running")
+                        .about("Host on which the MQTT Broker is running")
                         .default_value("localhost"),
                 )
                 .arg(
-                    Arg::with_name("MQTT Port")
-                        .short("p")
+                    Arg::new("MQTT Port")
+                        .short('p')
                         .long("port")
                         .value_name("INT")
                         .takes_value(true)
-                        .help("Port on which the MQTT Broker is running")
+                        .about("Port on which the MQTT Broker is running")
                         .default_value("1883"),
                 )
                 .arg(
-                    Arg::with_name("MQTT Base Topic")
-                        .short("t")
+                    Arg::new("MQTT Base Topic")
+                        .short('t')
                         .long("base-topic")
                         .value_name("STRING")
                         .takes_value(true)
-                        .help("MQTT Root Topic of the matrix to publish to")
+                        .about("MQTT Root Topic of the matrix to publish to")
                         .default_value("espMatrix"),
                 ),
         )
