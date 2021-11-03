@@ -12,7 +12,7 @@ pub struct MqttSender {
 }
 
 impl MqttSender {
-    pub fn new(host: &str, port: u16, base_topic: &str) -> MqttSender {
+    pub fn new(host: &str, port: u16, base_topic: &str) -> Self {
         let client_id = format!("led-matrix-remote-{:x}", rand::random::<u32>());
         let mqttoptions = MqttOptions::new(client_id, host, port);
         let (client, connection) = Client::new(mqttoptions, 10);
@@ -22,7 +22,7 @@ impl MqttSender {
             .spawn(move || thread_logic(connection))
             .expect("failed to start mqtt thread");
 
-        MqttSender {
+        Self {
             client,
             base_topic: base_topic.to_owned(),
             thread_handle: Some(thread_handle),
@@ -45,8 +45,8 @@ impl Drop for MqttSender {
 
 fn thread_logic(mut connection: Connection) {
     for notification in connection.iter() {
-        if let rumqttc::Event::Outgoing(rumqttc::Outgoing::Disconnect) =
-            notification.expect("mqtt connection error")
+        if notification.expect("mqtt connection error")
+            == rumqttc::Event::Outgoing(rumqttc::Outgoing::Disconnect)
         {
             break;
         }

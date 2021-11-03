@@ -8,7 +8,7 @@ pub enum Command<'a> {
 }
 
 impl Command<'_> {
-    pub fn get_verb(&self) -> &'static str {
+    pub const fn get_verb(&self) -> &'static str {
         match &self {
             Command::On(_) => "on",
             Command::Bri(_) => "bri",

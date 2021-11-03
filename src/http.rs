@@ -9,13 +9,13 @@ pub struct HttpSender {
 }
 
 impl HttpSender {
-    pub fn new(server: &str) -> HttpSender {
+    pub fn new(server: &str) -> Self {
         let client = Client::new();
 
         assert!(server.starts_with("http"));
         assert!(server.ends_with('/'));
 
-        HttpSender {
+        Self {
             client,
             server: server.to_owned(),
         }
