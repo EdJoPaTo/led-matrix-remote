@@ -1,40 +1,43 @@
-use clap::{app_from_crate, App, AppSettings, Arg};
+use clap::{command, Arg, Command, ValueHint};
 
+#[allow(clippy::too_many_lines)]
 #[must_use]
-pub fn build() -> App<'static> {
-    app_from_crate!()
+pub fn build() -> Command<'static> {
+    command!()
         .name("LED Matrix Remote")
-        .setting(AppSettings::SubcommandRequired)
+        .subcommand_required(true)
         .arg(
             Arg::new("verbose")
                 .short('v')
                 .long("verbose")
                 .global(true)
-                .about("Still show commands instead of omitting them"),
+                .help("Still show commands instead of omitting them"),
         )
         .subcommand(
-            App::new("http")
+            Command::new("http")
                 .about("Read from stdin how the led matrix should look and send it via HTTP")
                 .arg(
                     Arg::new("HTTP Server")
                         .short('s')
                         .long("server")
-                        .value_name("URI")
+                        .value_hint(ValueHint::Url)
+                        .value_name("URL")
                         .takes_value(true)
-                        .about("Specify the HTTP Server")
+                        .help("Specify the HTTP Server")
                         .default_value("http://esp-matrix/"),
                 ),
         )
         .subcommand(
-            App::new("mqtt")
+            Command::new("mqtt")
                 .about("Read from stdin how the led matrix should look and send it via MQTT")
                 .arg(
                     Arg::new("MQTT Server")
                         .short('b')
                         .long("broker")
                         .value_name("HOST")
+                        .value_hint(ValueHint::Hostname)
                         .takes_value(true)
-                        .about("Host on which the MQTT Broker is running")
+                        .help("Host on which the MQTT Broker is running")
                         .default_value("localhost"),
                 )
                 .arg(
@@ -42,8 +45,9 @@ pub fn build() -> App<'static> {
                         .short('p')
                         .long("port")
                         .value_name("INT")
+                        .value_hint(ValueHint::Other)
                         .takes_value(true)
-                        .about("Port on which the MQTT Broker is running")
+                        .help("Port on which the MQTT Broker is running")
                         .default_value("1883"),
                 )
                 .arg(
@@ -51,9 +55,15 @@ pub fn build() -> App<'static> {
                         .short('t')
                         .long("base-topic")
                         .value_name("STRING")
+                        .value_hint(ValueHint::Other)
                         .takes_value(true)
-                        .about("MQTT Root Topic of the matrix to publish to")
+                        .help("MQTT Root Topic of the matrix to publish to")
                         .default_value("espMatrix"),
                 ),
         )
+}
+
+#[test]
+fn verify() {
+    build().debug_assert();
 }
