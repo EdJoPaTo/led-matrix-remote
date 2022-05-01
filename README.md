@@ -1,8 +1,13 @@
 # LED Matrix Remote
+
 ![Rust](https://github.com/EdJoPaTo/led-matrix-remote/workflows/Rust/badge.svg)
 
 This tool was created to work with [esp-http-neomatrix-text](https://github.com/EdJoPaTo/esp-http-neomatrix-text) and [esp-mqtt-neomatrix-text](https://github.com/EdJoPaTo/esp-mqtt-neomatrix-text).
 Each of them is for a LED Matrix with some commands to set what its displaying: `bri`ghtness, `hue`, `sat`uration and `text`.
+
+⚠️ As I switched from the MQTT matrix towards [controlling each pixel on its own](https://github.com/EdJoPaTo/esp-remotecontrolled-led-matrix) this executable lost its purpose.
+The different usecases require too different implementations for their goals.
+Also their protocols on their own are rather simple so you should implement exactly what you need and don't overgeneratize.
 
 # Usage
 
